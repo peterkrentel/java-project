@@ -18,6 +18,11 @@ pipeline {
 	    steps{
 	      sh 'ant -f build.xml -v'
 	    }
+			post {
+	      success {
+	        archiveArtifacts artifacts: 'dist/*.jar', fingerprint: true
+	      }
+	    }
 	  }
 	  stage('deploy') {
 			agent {
@@ -36,11 +41,5 @@ pipeline {
 				sh "java -jar rectangle_${env.BUILD_NUMBER}.jar 3 4"
 			}
 		}
-	}
-	
-	post {
-	  always {
-	    archiveArtifacts artifacts: 'dist/*.jar', fingerprint: true
-	  }
 	}
 }
